@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Facturas de Casa</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <link rel="apple-touch-icon" href="logo.svg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Facturas">
+  <meta name="theme-color" content="#1d6a83">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="wrap">
+
+    <header>
+      <div class="header-brand">
+        <img src="logo.svg" class="app-logo" alt="">
+        <div>
+          <div class="label">Household bills</div>
+          <h1>FACTURAS DE CASA <span class="version" id="appVersion"></span></h1>
+        </div>
+      </div>
+      <div class="months" id="months" role="group" aria-label="Choose month"></div>
+    </header>
+
+    <nav class="tabs" role="tablist" aria-label="App sections">
+      <button role="tab" aria-selected="true"  data-tab="overview">Overview</button>
+      <button role="tab" aria-selected="false" data-tab="comparison">Comparison</button>
+      <button role="tab" aria-selected="false" data-tab="data">Your Data</button>
+    </nav>
+
+    <!-- ── Overview ───────────────────────────────── -->
+    <div id="panel-overview" class="tab-panel">
+
+      <section class="summary" aria-live="polite">
+        <div>
+          <div class="label">Total <span id="sumMonth"></span></div>
+          <div class="big" id="sumTotal">—</div>
+        </div>
+        <div>
+          <div class="label">Receipts</div>
+          <div class="mid" id="sumCount">—</div>
+        </div>
+      </section>
+
+      <section>
+        <h2 id="ledgerTitle">Receipts</h2>
+        <ul class="ledger" id="ledger"></ul>
+      </section>
+
+      <section>
+        <h2>Add a bill</h2>
+        <form id="addForm">
+          <label>Date <input id="fDate" type="date" required></label>
+          <label>Provider
+            <input id="fProv" list="provList" placeholder="TotalEnergies" required>
+            <datalist id="provList"></datalist>
+          </label>
+          <label>Category
+            <select id="fCat">
+              <option>Energy</option>
+              <option>Gym</option>
+              <option>Insurance</option>
+              <option>Water</option>
+              <option>Internet (Orange)</option>
+              <option>Community</option>
+              <option>Other</option>
+            </select>
+          </label>
+          <label>Amount (€) <input id="fAmt" type="text" inputmode="decimal" placeholder="59,05" required></label>
+          <label>Note <input id="fNote" placeholder="optional"></label>
+          <button class="btn" type="submit">Add bill</button>
+        </form>
+        <p class="note" id="formNote"></p>
+      </section>
+
+    </div>
+
+    <!-- ── Comparison ─────────────────────────────── -->
+    <div id="panel-comparison" class="tab-panel" hidden>
+
+      <div class="view-toggle" role="group" aria-label="View mode">
+        <button data-view="chart"   aria-pressed="true">Chart</button>
+        <button data-view="numbers" aria-pressed="false">Numbers</button>
+        <button data-view="table"   aria-pressed="false">Table</button>
+      </div>
+
+      <!-- Chart -->
+      <div id="view-chart" class="comparison-view">
+        <section>
+          <h2>Total Spending by Month</h2>
+          <div class="chart-scroll" id="chartWrap"></div>
+          <div class="chart-legend">
+            <span><span class="legend-dot" style="background:var(--down)"></span>Lower than previous</span>
+            <span><span class="legend-dot" style="background:var(--up)"></span>Higher than previous</span>
+            <span><span class="legend-dot" style="background:var(--accent)"></span>First month / selected</span>
+          </div>
+        </section>
+        <section>
+          <h2>Per-Provider Trend</h2>
+          <div class="chart-scroll" id="provChartWrap"></div>
+        </section>
+      </div>
+
+      <!-- Numbers -->
+      <div id="view-numbers" class="comparison-view" hidden>
+        <section>
+          <h2>Monthly Summary</h2>
+          <div id="numbersWrap"></div>
+        </section>
+      </div>
+
+      <!-- Table -->
+      <div id="view-table" class="comparison-view" hidden>
+        <section>
+          <h2>Provider Breakdown by Month</h2>
+          <div class="scroll">
+            <table id="grid">
+              <thead></thead>
+              <tbody></tbody>
+              <tfoot></tfoot>
+            </table>
+          </div>
+        </section>
+      </div>
+
+    </div>
+
+    <!-- ── Your Data ───────────────────────────────── -->
+    <div id="panel-data" class="tab-panel" hidden>
+
+      <section>
+        <h2>Save as PDF</h2>
+        <p class="note">Downloads the selected month's bills as a PDF you can print or send to anyone.</p>
+        <div class="actions">
+          <button class="btn" type="button" id="pdfBtn">Download PDF</button>
+        </div>
+        <p class="note" id="dataNote"></p>
+      </section>
+
+      <section>
+        <h2>About your data</h2>
+        <p class="note">Bills are saved automatically in this browser. They stay here as long as you don't clear your browser data — no account needed.</p>
+      </section>
+
+    </div>
+
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
